@@ -14,14 +14,16 @@ defmodule ExMaps.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: [:logger],
+      mod: {ExMaps.Application, []}
     ]
   end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:httpoison, "~> 1.0"}
+      {:httpoison, "~> 1.0"},
+      {:nebulex, "~> 1.0.0-rc.3"}
     ]
   end
 end

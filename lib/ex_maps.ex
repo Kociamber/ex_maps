@@ -2,6 +2,7 @@ defmodule ExMaps do
   @moduledoc """
   Public application interface for Google Maps API calls.
   """
+  alias ExMaps.Coordinator
 
   @typedoc """
   General params.
@@ -20,7 +21,7 @@ defmodule ExMaps do
   * `destination` — It can be passed in three different forms, as the address string,
   latitude/longitude tuple or map containing PlaceID.
   """
-  @type coordinates :: %{origin: waypoint, destination: waypoint}
+  @type coordinates :: [%{origin: waypoint, destination: waypoint}]
 
   @typedoc """
   Optional API request parameters.
@@ -60,9 +61,9 @@ defmodule ExMaps do
       %ProbablyExMapsStructOrSmth{}
 
   """
-  def get_directions() do
+  def get_directions(coordinates, options) when is_list(coordinates) do
     # Example API call:
     # HTTPoison.get("https://maps.googleapis.com/maps/api/directions/json?origin=Toronto&destination=Montreal&key=#{Application.get_env(:ex_maps, :api_key)}")
-    
+    Coordinator.spawn_workers(coordinates, options)
   end
 end
