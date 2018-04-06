@@ -1,21 +1,10 @@
 # ExMaps
 
-**TODO: Add description**
+**Fast, industrial strength, concurrent Google Maps interface for Elixir platforms.**
 
-## Installation
+## Overivew
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `ex_maps` to your list of dependencies in `mix.exs`:
+Under heavy development. Please stay tuned as the interface will deliver some really cool features, including:
 
-```elixir
-def deps do
-  [
-    {:ex_maps, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/ex_maps](https://hexdocs.pm/ex_maps).
-
+*   concurrent API calls
+*   super fast generational caching
