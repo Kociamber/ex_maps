@@ -11,7 +11,7 @@ defmodule ExMaps do
   Please note that json is recommended by Google docs.
   """
   @type output_format :: :json | :xml
-  @type waypoint      :: String.t | {float, float} | %{place_id: String.t}
+  @type waypoint :: String.t() | {float, float} | %{place_id: String.t()}
 
   @typedoc """
   Required API request parameters.
@@ -31,22 +31,32 @@ defmodule ExMaps do
   * `waypoints` -  A list of waypoints.
   * `alternatives` -  If set to true, API may provide more than one route alternative.
   """
-  @type mode           :: :driving | :walking | :bicycling | :transit
-  @type waypoints      :: [waypoint]
-  @type alternatives   :: boolean()
-  @type avoid          :: :tolls | :highways | :ferries | :indoor
-  @type language       :: String.t
-  @type units          :: :metric | :imperial
-  @type region         :: String.t
-  @type arrival_time   :: %DateTime{}
+  @type mode :: :driving | :walking | :bicycling | :transit
+  @type waypoints :: [waypoint]
+  @type alternatives :: boolean()
+  @type avoid :: :tolls | :highways | :ferries | :indoor
+  @type language :: String.t()
+  @type units :: :metric | :imperial
+  @type region :: String.t()
+  @type arrival_time :: %DateTime{}
   @type departure_time :: %DateTime{}
-  @type traffic_model  :: :best_guess | :pessimistic | :optimistic
-  @type transit_mode   :: :bus | :subway | :train | :tram | :rail
+  @type traffic_model :: :best_guess | :pessimistic | :optimistic
+  @type transit_mode :: :bus | :subway | :train | :tram | :rail
   @type transit_routing_preference :: :less_walking | :fewer_transfers
 
-  @type option :: mode | waypoints | alternatives | avoid | language |
-                  units | region | arrival_time | departure_time | traffic_model |
-                  transit_mode | transit_routing_preference
+  @type option ::
+          mode
+          | waypoints
+          | alternatives
+          | avoid
+          | language
+          | units
+          | region
+          | arrival_time
+          | departure_time
+          | traffic_model
+          | transit_mode
+          | transit_routing_preference
 
   @type options :: [option: term]
 

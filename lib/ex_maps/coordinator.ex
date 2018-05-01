@@ -20,9 +20,9 @@ defmodule ExMaps.Coordinator do
 
   def handle_call({:spawn_workers, coordinates, options}, _from, _state) do
     worker_tasks =
-      Enum.map(coordinates, fn(coordinates) -> Task.async(Worker, [coordinates, options]) end)
-    results = Enum.map(worker_tasks, fn(task) -> Task.await(task) end)
+      Enum.map(coordinates, fn coordinates -> Task.async(Worker, [coordinates, options]) end)
+
+    results = Enum.map(worker_tasks, fn task -> Task.await(task) end)
     {:reply, results, results}
   end
-
 end
