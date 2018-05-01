@@ -11,7 +11,7 @@ defmodule ExMaps.Worker do
   Checks wether request has been already cached, if not it sends the request to
   Google API and caches it with specific TTL.
   """
-  @spec get_coordinates(map, key: atom, key: term) :: map
+  @spec get_coordinates(map, [key: atom], key: term) :: map
   def get_coordinates(coordinates, opts, ttl \\ :infinity) do
     case Cache.get(coordinates) do
       # If location wasn't cached within given TTL, call Google API

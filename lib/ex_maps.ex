@@ -11,6 +11,7 @@ defmodule ExMaps do
   Please note that json is recommended by Google docs.
   """
   @type output_format :: :json | :xml
+  @type protocol :: :https | :http
   @type waypoint :: String.t() | {float, float} | %{place_id: String.t()}
 
   @typedoc """
@@ -46,6 +47,7 @@ defmodule ExMaps do
 
   @type option ::
           mode
+          | output_format
           | waypoints
           | alternatives
           | avoid
