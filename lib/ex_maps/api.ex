@@ -32,7 +32,7 @@ defmodule ExMaps.Api do
   end
 
   defp parse_json({:ok, json}) do
-    {:ok, map} = Poison.decode(json)
+    {:ok, map} = Jason.decode(json)
     map
   end
 

@@ -13,6 +13,7 @@ defmodule ExMaps do
   @type output_format :: :json | :xml
   @type protocol :: :https | :http
   @type waypoint :: String.t() | {float, float} | %{place_id: String.t()}
+  @type ttl :: integer()
 
   @typedoc """
   Required API request parameters.
@@ -73,7 +74,8 @@ defmodule ExMaps do
       %ProbablyExMapsStructOrSmth{}
 
   """
-  def get_directions(coordinates, options) when is_list(coordinates) do
+  @spec get_directions(coordinates, options) :: map
+  def get_directions(coordinates, options \\ []) when is_list(coordinates) do
     # Example API call:
     # HTTPoison.get("https://maps.googleapis.com/maps/api/directions/json?origin=Toronto&destination=Montreal&key=#{Application.get_env(:ex_maps, :api_key)}")
     Coordinator.spawn_workers(coordinates, options)

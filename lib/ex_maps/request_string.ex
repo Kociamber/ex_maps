@@ -14,19 +14,20 @@ defmodule ExMaps.RequestString do
     |> output_substring()
     |> origin_destination_substring()
     |> add_api_key_substring()
+    |> IO.inspect()
   end
 
   # Set protocol, defaults to HTTPS.
-  defp add_protocol_substring({string, coordinates, options}) do
+  defp add_protocol_substring({coordinates, options}) do
     case Keyword.get(options, :protocol) do
-      :http -> {string <> "http://", coordinates, options}
-      _ -> {string <> "https://", coordinates, options}
+      :http -> {"http://", coordinates, options}
+      _ -> {"https://", coordinates, options}
     end
   end
 
   # Directions call.
-  defp add_prefix_substring({coordinates, options}),
-    do: {"maps.googleapis.com/maps/api/directions/", coordinates, options}
+  defp add_prefix_substring({string, coordinates, options}),
+    do: {string <> "maps.googleapis.com/maps/api/directions/", coordinates, options}
 
   # Output format, set JSON as default.
   defp output_substring({string, coordinates, options}) do
