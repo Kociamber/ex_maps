@@ -23,6 +23,7 @@ defmodule ExMaps.MixProject do
   defp deps do
     [
       {:httpoison, "~> 1.0"},
+      {:jason, "~> 1.0"},
       {:nebulex, "~> 1.0.0-rc.3"}
     ]
   end
