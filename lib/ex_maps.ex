@@ -1,6 +1,6 @@
 defmodule ExMaps do
   @moduledoc """
-  Public application interface for Google Maps API calls.
+  Public ExMaps application interface.
   """
   alias ExMaps.Coordinator
 
@@ -27,6 +27,7 @@ defmodule ExMaps do
 
   @typedoc """
   Optional API request parameters.
+  https://developers.google.com/maps/documentation/directions/intro
 
   * `mode` -  Specifies the mode of transport to use when calculating directions.
   Defaults to driving.
@@ -34,9 +35,10 @@ defmodule ExMaps do
   * `alternatives` -  If set to true, API may provide more than one route alternative.
   """
   @type mode :: :driving | :walking | :bicycling | :transit
-  @type waypoints :: [waypoint]
+  @type waypoints :: :waypoints
   @type alternatives :: boolean()
-  @type avoid :: :tolls | :highways | :ferries | :indoor
+  @type avoid :: [avoid_value]
+  @type avoid_value :: :tolls | :highways | :ferries | :indoor
   @type language :: String.t()
   @type units :: :metric | :imperial
   @type region :: String.t()
@@ -51,7 +53,6 @@ defmodule ExMaps do
           | output_format
           | waypoints
           | alternatives
-          | avoid
           | language
           | units
           | region
@@ -70,7 +71,7 @@ defmodule ExMaps do
 
   ## Examples
 
-      iex> ExMaps.get_directions(coordinates, options)
+      iex> ExMaps.get_directions([%{origin: "Warsaw", destination: "Amsterdam"}], units: :metric)
       %ProbablyExMapsStructOrSmth{}
 
   """

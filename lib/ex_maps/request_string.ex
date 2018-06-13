@@ -9,16 +9,19 @@ defmodule ExMaps.RequestString do
   @spec build(map, key: :atom) :: String.t()
   def build(coordinates, options) do
     {coordinates, options}
-    |> add_protocol_substring()
-    |> add_prefix_substring()
+    |> protocol_substring()
+    |> prefix_substring()
     |> output_substring()
     |> origin_destination_substring()
+    |> mode_substring()
+    |> waypoints_substring()
+    |> restrictions_substring()
+    |> unit_substring()
     |> add_api_key_substring()
-    |> IO.inspect()
   end
 
   # Set protocol, defaults to HTTPS.
-  defp add_protocol_substring({coordinates, options}) do
+  defp protocol_substring({coordinates, options}) do
     case Keyword.get(options, :protocol) do
       :http -> {"http://", coordinates, options}
       _ -> {"https://", coordinates, options}
@@ -26,7 +29,7 @@ defmodule ExMaps.RequestString do
   end
 
   # Directions call.
-  defp add_prefix_substring({string, coordinates, options}),
+  defp prefix_substring({string, coordinates, options}),
     do: {string <> "maps.googleapis.com/maps/api/directions/", coordinates, options}
 
   # Output format, set JSON as default.
@@ -46,9 +49,64 @@ defmodule ExMaps.RequestString do
 
   # Add API key.
   defp add_api_key_substring(string),
-    do: string <> "&APPID=#{Application.get_env(:ex_owm, :api_key)}"
+    do: string <> "&APPID=#{Application.get_env(:ex_maps, :ex_maps_api_key)}"
 
-  # Helper functions.
+  ## Optional parameters section.
+
+  # Transport mode, Google Maps API defaults it to driving.
+  defp mode_substring({string, options}) do
+    case Keyword.get(options, :mode) do
+      :walking -> {string <> "&mode=walking", options}
+      :bicycling -> {string <> "&mode=bicycling", options}
+      :transit -> {string <> "&mode=transit", options}
+      _ -> {string, options}
+    end
+  end
+
+  defp waypoints_substring({string, options}) do
+    case Keyword.get(options, :waypoints) do
+      nil ->
+        {string, options}
+
+      list_of_waypoints ->
+        string =
+          case Keyword.get(list_of_waypoints, :optimize) do
+            true -> string <> "&waypoints=optimize:true|"
+            _ -> string <> "&waypoints="
+          end
+
+        string =
+          Enum.reduce(list_of_waypoints, fn waypoint, string ->
+            string <> "|" <> prepare_waypoint(waypoint)
+          end)
+
+        {string, options}
+    end
+  end
+
+  defp restrictions_substring({string, options}) do
+    case Keyword.get(options, :avoid) do
+      nil ->
+        {string, options}
+
+      list_to_avoid ->
+        string <>
+          "&avoid=" <>
+          Enum.reduce(list_to_avoid, fn avoid, string -> string <> "|" <> to_string(avoid) end)
+
+        {string, options}
+    end
+  end
+
+  defp unit_substring({string, options}) do
+    case Keyword.get(options, :units) do
+      nil -> {string, options}
+      :metric -> string <> "&units=metric"
+      :imperial -> string <> "&units=imperial"
+    end
+  end
+
+  ## Helper functions.
   defp prepare_coordinates(%{origin: origin, destination: destination}) do
     "origin="
     |> Kernel.<>(prepare_waypoint(origin))
