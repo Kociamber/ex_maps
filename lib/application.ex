@@ -1,4 +1,7 @@
 defmodule ExMaps.Application do
+  @moduledoc """
+  Application module with supervision tree.
+  """
   require Logger
   use Application
   alias ExMaps.{Cache, Coordinator}

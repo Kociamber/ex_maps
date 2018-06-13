@@ -24,6 +24,7 @@ defmodule ExMaps.MixProject do
     [
       {:httpoison, "~> 1.0"},
       {:jason, "~> 1.0"},
+      {:credo, "~> 0.9.1", only: [:dev, :test], runtime: false},
       {:nebulex, "~> 1.0.0-rc.3"}
     ]
   end
