@@ -1,5 +1,7 @@
 # ExMaps
 
+**UNDER DEVELOPMENT**
+
 **Fast, industrial strength, concurrent Google Maps interface for Elixir platforms.**
 
 ## Overivew
