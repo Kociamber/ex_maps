@@ -5,7 +5,7 @@ defmodule ExMaps.MixProject do
     [
       app: :ex_maps,
       version: "0.1.0",
-      elixir: "~> 1.6",
+      elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
@@ -23,8 +23,8 @@ defmodule ExMaps.MixProject do
   defp deps do
     [
       {:httpoison, "~> 1.0"},
-      {:jason, "~> 1.0"},
-      {:credo, "~> 0.9.1", only: [:dev, :test], runtime: false},
+      {:jason, "~> 1.1"},
+      {:credo, "~> 0.10.0", only: [:dev, :test], runtime: false},
       {:nebulex, "~> 1.0.0-rc.3"}
     ]
   end
