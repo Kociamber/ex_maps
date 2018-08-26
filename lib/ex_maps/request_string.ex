@@ -49,7 +49,7 @@ defmodule ExMaps.RequestString do
 
   # Add API key.
   defp add_api_key_substring(string),
-    do: string <> "&APPID=#{Application.get_env(:ex_maps, :ex_maps_api_key)}"
+    do: string <> "&APPID=#{Application.get_env(:ex_maps, :api_key)}"
 
   ## Optional parameters section.
 
@@ -100,7 +100,7 @@ defmodule ExMaps.RequestString do
 
   defp unit_substring({string, options}) do
     case Keyword.get(options, :units) do
-      nil -> {string, options}
+      nil -> string
       :metric -> string <> "&units=metric"
       :imperial -> string <> "&units=imperial"
     end
