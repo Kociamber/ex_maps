@@ -162,4 +162,88 @@ defmodule GetDirectionsTest do
 
     assert status == "OK"
   end
+
+  test ": can get directions data with get_directions/2 and metric units" do
+    # given
+    coordinates = [%{origin: "Warsaw", destination: "Amsterdam"}]
+    # when
+    result = ExMaps.get_directions(coordinates, units: :metric)
+    # then
+    # check whether a list of maps is returned
+    assert is_list(result)
+    assert result != []
+    map = List.first(result)
+    assert is_map(map)
+    # check wether map has specific keys to confirm that request was successful
+    units =
+      map
+      |> Map.get("routes")
+      |> List.first()
+      |> Map.get("legs")
+      |> List.first()
+      |> Map.get("distance")
+      |> Map.get("text")
+
+    assert String.contains?(units, "km")
+  end
+
+  test ": can get directions data with get_directions/2 and imperial units" do
+    # given
+    coordinates = [%{origin: "Warsaw", destination: "Amsterdam"}]
+    # when
+    result = ExMaps.get_directions(coordinates, units: :imperial)
+    # then
+    # check whether a list of maps is returned
+    assert is_list(result)
+    assert result != []
+    map = List.first(result)
+    assert is_map(map)
+    # check wether map has specific keys to confirm that request was successful
+    units =
+      map
+      |> Map.get("routes")
+      |> List.first()
+      |> Map.get("legs")
+      |> List.first()
+      |> Map.get("distance")
+      |> Map.get("text")
+
+    assert String.contains?(units, "mi")
+  end
+
+  test ": can get directions data with get_directions/2 biasing on region" do
+    # given
+    coordinates = [%{origin: "Toledo", destination: "Madrid"}]
+    # when
+    result = ExMaps.get_directions(coordinates, region: "es")
+    # then
+    # check whether a list of maps is returned
+    assert is_list(result)
+    assert result != []
+    map = List.first(result)
+    assert is_map(map)
+
+    # check wether map has specific keys to confirm that request was successful
+    status = Map.get(map, "status")
+
+    assert status == "OK"
+  end
+
+  test ": can't get directions data with get_directions/2 without specified region" do
+    # given
+    coordinates = [%{origin: "Toledo", destination: "Madrid"}]
+    # when
+    result = ExMaps.get_directions(coordinates)
+    # then
+    # check whether a list of maps is returned
+    assert is_list(result)
+    assert result != []
+    map = List.first(result)
+    assert is_map(map)
+
+    # check wether map has specific keys to confirm that request was successful
+    status = Map.get(map, "status")
+
+    assert status == "ZERO_RESULTS"
+  end
 end
