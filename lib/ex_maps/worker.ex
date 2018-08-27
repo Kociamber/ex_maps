@@ -16,7 +16,6 @@ defmodule ExMaps.Worker do
     case Cache.get({coordinates, options}) do
       # If location wasn't cached within given TTL, call Google API
       nil ->
-        IO.puts("I'm at nil so I will call API")
         result = Api.send_and_parse_request(coordinates, options)
 
         # Retrieve TTL cache, defaults to inifinite time
