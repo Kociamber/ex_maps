@@ -13,9 +13,10 @@ defmodule ExMaps.Worker do
   """
   @spec get_coordinates(map, key: atom) :: map
   def get_coordinates(coordinates, options) do
-    case Cache.get(coordinates) do
+    case Cache.get({coordinates, options}) do
       # If location wasn't cached within given TTL, call Google API
       nil ->
+        IO.puts("I'm at nil so I will call API")
         result = Api.send_and_parse_request(coordinates, options)
 
         # Retrieve TTL cache, defaults to inifinite time
@@ -25,7 +26,7 @@ defmodule ExMaps.Worker do
             ttl -> ttl
           end
 
-        Cache.set(coordinates, result, ttl: ttl)
+        Cache.set({coordinates, options}, result, ttl: ttl)
 
       # If location was already cached return it
       location ->
