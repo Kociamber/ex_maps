@@ -14,6 +14,7 @@ defmodule ExMaps.RequestString do
     |> output_substring()
     |> origin_destination_substring()
     |> mode_substring()
+    |> language_substring()
     |> waypoints_substring()
     |> restrictions_substring()
     |> unit_substring()
@@ -63,6 +64,16 @@ defmodule ExMaps.RequestString do
     end
   end
 
+  defp language_substring({string, options}) do
+    case Keyword.get(options, :language) do
+      nil ->
+        {string, options}
+
+      language ->
+        {string <> "&language=#{language}", options}
+    end
+  end
+
   defp waypoints_substring({string, options}) do
     case Keyword.get(options, :waypoints) do
       nil ->
@@ -92,7 +103,9 @@ defmodule ExMaps.RequestString do
       list_to_avoid ->
         string <>
           "&avoid=" <>
-          Enum.reduce(list_to_avoid, fn avoid, string -> string <> "|" <> to_string(avoid) end)
+          Enum.reduce(list_to_avoid, fn avoid, acc ->
+            to_string(acc) <> "|" <> to_string(avoid)
+          end)
 
         {string, options}
     end
