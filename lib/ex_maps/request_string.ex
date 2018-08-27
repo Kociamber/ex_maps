@@ -17,7 +17,8 @@ defmodule ExMaps.RequestString do
     |> language_substring()
     |> waypoints_substring()
     |> restrictions_substring()
-    |> unit_substring()
+    |> units_substring()
+    |> region_substring()
     |> add_api_key_substring()
   end
 
@@ -49,7 +50,7 @@ defmodule ExMaps.RequestString do
   end
 
   # Add API key.
-  defp add_api_key_substring(string),
+  defp add_api_key_substring({string, _options}),
     do: string <> "&APPID=#{Application.get_env(:ex_maps, :api_key)}"
 
   ## Optional parameters section.
@@ -64,6 +65,7 @@ defmodule ExMaps.RequestString do
     end
   end
 
+  # Directions language
   defp language_substring({string, options}) do
     case Keyword.get(options, :language) do
       nil ->
@@ -111,11 +113,22 @@ defmodule ExMaps.RequestString do
     end
   end
 
-  defp unit_substring({string, options}) do
+  defp units_substring({string, options}) do
     case Keyword.get(options, :units) do
-      nil -> string
-      :metric -> string <> "&units=metric"
-      :imperial -> string <> "&units=imperial"
+      nil -> {string, options}
+      :metric -> {string <> "&units=metric", options}
+      :imperial -> {string <> "&units=imperial", options}
+    end
+  end
+
+  # Region biasing
+  defp region_substring({string, options}) do
+    case Keyword.get(options, :region) do
+      nil ->
+        {string, options}
+
+      region ->
+        {string <> "&region=#{region}", options}
     end
   end
 
