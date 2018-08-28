@@ -84,10 +84,8 @@ defmodule ExMaps do
       [%{...}]
 
   """
-  @spec get_directions(coordinates, options) :: map
+  @spec get_directions(coordinates, options) :: [map]
   def get_directions(coordinates, options \\ []) when is_list(coordinates) do
-    # Example API call:
-    # HTTPoison.get("https://maps.googleapis.com/maps/api/directions/json?origin=Toronto&destination=Montreal&key=#{Application.get_env(:ex_maps, :api_key)}")
     Coordinator.spawn_workers(coordinates, options)
   end
 end
