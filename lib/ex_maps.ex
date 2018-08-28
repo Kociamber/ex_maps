@@ -42,8 +42,8 @@ defmodule ExMaps do
   @type language :: String.t()
   @type units :: :metric | :imperial
   @type region :: String.t()
-  @type arrival_time :: %DateTime{}
-  @type departure_time :: %DateTime{}
+  @type arrival_time :: integer
+  @type departure_time :: integer
   @type traffic_model :: :best_guess | :pessimistic | :optimistic
   @type transit_mode :: :bus | :subway | :train | :tram | :rail
   @type transit_routing_preference :: :less_walking | :fewer_transfers

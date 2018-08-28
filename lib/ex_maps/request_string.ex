@@ -19,6 +19,11 @@ defmodule ExMaps.RequestString do
     |> restrictions_substring()
     |> units_substring()
     |> region_substring()
+    |> arrival_time_substring()
+    |> departure_time_substring()
+    |> traffic_model_substring()
+    |> transit_mode_substring()
+    |> transit_routing_preference_substring()
     |> add_api_key_substring()
   end
 
@@ -115,9 +120,9 @@ defmodule ExMaps.RequestString do
 
   defp units_substring({string, options}) do
     case Keyword.get(options, :units) do
-      nil -> {string, options}
       :metric -> {string <> "&units=metric", options}
       :imperial -> {string <> "&units=imperial", options}
+      _ -> {string, options}
     end
   end
 
@@ -129,6 +134,54 @@ defmodule ExMaps.RequestString do
 
       region ->
         {string <> "&region=#{region}", options}
+    end
+  end
+
+  # Arrival time must be an integer
+  defp arrival_time_substring({string, options}) do
+    with time <- Keyword.get(options, :arrival_time),
+         true <- is_integer(time) do
+      {string <> "&arrival_time=#{to_string(time)}", options}
+    else
+      _ -> {string, options}
+    end
+  end
+
+  # Departure time must be an integer
+  defp departure_time_substring({string, options}) do
+    with time <- Keyword.get(options, :departure_time),
+         true <- is_integer(time) do
+      {string <> "&departure_time=#{to_string(time)}", options}
+    else
+      _ -> {string, options}
+    end
+  end
+
+  defp traffic_model_substring({string, options}) do
+    case Keyword.get(options, :traffic_model) do
+      :best_guess -> {string <> "&traffic_model=best_guess", options}
+      :pessimistic -> {string <> "&traffic_model=pessimistic", options}
+      :optimistic -> {string <> "&traffic_model=optimistic", options}
+      _ -> {string, options}
+    end
+  end
+
+  defp transit_mode_substring({string, options}) do
+    case Keyword.get(options, :transit_mode) do
+      :bus -> {string <> "&transit_mode=bus", options}
+      :subway -> {string <> "&transit_mode=subway", options}
+      :train -> {string <> "&transit_mode=train", options}
+      :tram -> {string <> "&transit_mode=tram", options}
+      :rail -> {string <> "&transit_mode=rail", options}
+      _ -> {string, options}
+    end
+  end
+
+  defp transit_routing_preference_substring({string, options}) do
+    case Keyword.get(options, :transit_routing_preference) do
+      :less_walking -> {string <> "&transit_routing_preference=less_walking", options}
+      :fewer_transfers -> {string <> "&transit_routing_preference=fewer_transfers", options}
+      _ -> {string, options}
     end
   end
 

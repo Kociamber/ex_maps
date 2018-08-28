@@ -1,6 +1,9 @@
 defmodule GetDirectionsTest do
   use ExUnit.Case
 
+  # Due to a query limit while using free API key only 11 tests can be sent in one go.
+  # Therefore there will be 11 tests with random params defined. 
+
   test ": can get directions data with get_directions/2, float waypoints and default options" do
     # given
     coordinates = [%{origin: {52.3714894, 4.8957388}, destination: {52.3719729, 4.8903469}}]
@@ -223,10 +226,8 @@ defmodule GetDirectionsTest do
     map = List.first(result)
     assert is_map(map)
 
-    # check wether map has specific keys to confirm that request was successful
-    status = Map.get(map, "status")
-
-    assert status == "OK"
+    # check response status
+    assert Map.get(map, "status") == "OK"
   end
 
   test ": can't get directions data with get_directions/2 without specified region" do
@@ -241,9 +242,7 @@ defmodule GetDirectionsTest do
     map = List.first(result)
     assert is_map(map)
 
-    # check wether map has specific keys to confirm that request was successful
-    status = Map.get(map, "status")
-
-    assert status == "ZERO_RESULTS"
+    # check response status
+    assert Map.get(map, "status") == "ZERO_RESULTS"
   end
 end
