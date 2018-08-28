@@ -111,11 +111,12 @@ defmodule ExMaps.RequestString do
         {string, options}
 
       list_to_avoid ->
-        string <>
-          "&avoid=" <>
-          Enum.reduce(list_to_avoid, fn avoid, acc ->
-            to_string(acc) <> "|" <> to_string(avoid)
-          end)
+        string =
+          string <>
+            "&avoid=" <>
+            Enum.reduce(list_to_avoid, fn avoid, acc ->
+              to_string(acc) <> "|" <> to_string(avoid)
+            end)
 
         {string, options}
     end
