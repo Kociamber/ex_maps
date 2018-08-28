@@ -81,7 +81,7 @@ defmodule ExMaps do
   ## Examples
 
       iex> ExMaps.get_directions([%{origin: "Warsaw", destination: "Amsterdam"}], units: :metric)
-      %ProbablyExMapsStructOrSmth{}
+      [%{...}]
 
   """
   @spec get_directions(coordinates, options) :: map
