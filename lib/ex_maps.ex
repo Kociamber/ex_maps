@@ -26,13 +26,22 @@ defmodule ExMaps do
   @type coordinates :: [%{origin: waypoint, destination: waypoint}]
 
   @typedoc """
-  Optional API request parameters.
+  Optional API request parameters. Detailed description can be found below:
   https://developers.google.com/maps/documentation/directions/intro
 
   * `mode` -  Specifies the mode of transport to use when calculating directions.
   Defaults to driving.
   * `waypoints` -  A list of waypoints.
   * `alternatives` -  If set to true, API may provide more than one route alternative.
+  * `avoid` -  List of specific routes to avoid.
+  * `language` -  Directions may be provided in specified language (but not all JSON / XML answer fields)
+  * `units` -  If not present, unit system of the origin's country or region will be returned.
+  * `region` -  Biasing on a specific region.
+  * `arrival_time` -  Desired arrival time in seconds since midnight, January 1, 1970 UTC.
+  * `departure_time` -  Desired departure time in seconds since midnight, January 1, 1970 UTC.
+  * `traffic_model` -  It may only be specified for driving directions where the request includes a departure_time.
+  * `transit_mode` -  It may only be specified for transit directions.
+  * `transit_routing_preference` -  It may bias the options returned.
   """
   @type mode :: :driving | :walking | :bicycling | :transit
   @type waypoints :: :waypoints
