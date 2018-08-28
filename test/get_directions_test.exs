@@ -2,7 +2,7 @@ defmodule GetDirectionsTest do
   use ExUnit.Case
 
   # Due to a query limit while using free API key only 11 tests can be sent in one go.
-  # Therefore there will be 11 tests with random params defined. 
+  # Therefore there will be 11 tests with random params defined.
 
   test ": can get directions data with get_directions/2, float waypoints and default options" do
     # given
@@ -15,7 +15,7 @@ defmodule GetDirectionsTest do
     assert result != []
     map = List.first(result)
     assert is_map(map)
-    # check wether map has specific keys to confirm that request was successful
+    # check response status
     status =
       map
       |> Map.get("geocoded_waypoints")
@@ -36,7 +36,7 @@ defmodule GetDirectionsTest do
     assert result != []
     map = List.first(result)
     assert is_map(map)
-    # check wether map has specific keys to confirm that request was successful
+    # check response status
     status =
       map
       |> Map.get("geocoded_waypoints")
@@ -57,7 +57,7 @@ defmodule GetDirectionsTest do
     assert result != []
     map = List.first(result)
     assert is_map(map)
-    # check wether map has specific keys to confirm that request was successful
+    # check response status
     status =
       map
       |> Map.get("geocoded_waypoints")
@@ -78,7 +78,7 @@ defmodule GetDirectionsTest do
     assert result != []
     map = List.first(result)
     assert is_map(map)
-    # check wether map has specific keys to confirm that request was successful
+    # check response status
     status =
       map
       |> Map.get("geocoded_waypoints")
@@ -99,7 +99,7 @@ defmodule GetDirectionsTest do
     assert result != []
     map = List.first(result)
     assert is_map(map)
-    # check wether map has specific keys to confirm that request was successful
+    # check response status
     status =
       map
       |> Map.get("geocoded_waypoints")
@@ -120,7 +120,7 @@ defmodule GetDirectionsTest do
     assert result != []
     map = List.first(result)
     assert is_map(map)
-    # check wether map has specific keys to confirm that request was successful
+    # check response status
     status =
       map
       |> Map.get("geocoded_waypoints")
@@ -141,7 +141,7 @@ defmodule GetDirectionsTest do
     assert result != []
     map = List.first(result)
     assert is_map(map)
-    # check wether map has specific keys to confirm that request was successful
+    # check response status
     status =
       map
       |> Map.get("geocoded_waypoints")
@@ -160,9 +160,8 @@ defmodule GetDirectionsTest do
       |> List.first()
       |> Map.get("html_instructions")
 
-    # assert that instructions are in Polish
+    # assert that instructions are in Polish and check response status
     assert String.starts_with?(lang_check, "Kieruj się")
-
     assert status == "OK"
   end
 
@@ -177,7 +176,7 @@ defmodule GetDirectionsTest do
     assert result != []
     map = List.first(result)
     assert is_map(map)
-    # check wether map has specific keys to confirm that request was successful
+    # check response units and status
     units =
       map
       |> Map.get("routes")
@@ -188,30 +187,22 @@ defmodule GetDirectionsTest do
       |> Map.get("text")
 
     assert String.contains?(units, "km")
+    assert Map.get(map, "status") == "OK"
   end
 
-  test ": can get directions data with get_directions/2 and imperial units" do
+  test ": can get directions data with get_directions/2 and additional waypoints" do
     # given
     coordinates = [%{origin: "Warsaw", destination: "Amsterdam"}]
     # when
-    result = ExMaps.get_directions(coordinates, units: :imperial)
+    result = ExMaps.get_directions(coordinates, waypoints: ["Berlin"])
     # then
     # check whether a list of maps is returned
     assert is_list(result)
     assert result != []
     map = List.first(result)
     assert is_map(map)
-    # check wether map has specific keys to confirm that request was successful
-    units =
-      map
-      |> Map.get("routes")
-      |> List.first()
-      |> Map.get("legs")
-      |> List.first()
-      |> Map.get("distance")
-      |> Map.get("text")
-
-    assert String.contains?(units, "mi")
+    # check response status
+    assert Map.get(map, "status") == "OK"
   end
 
   test ": can get directions data with get_directions/2 biasing on region" do

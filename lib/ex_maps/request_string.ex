@@ -87,17 +87,19 @@ defmodule ExMaps.RequestString do
         {string, options}
 
       list_of_waypoints ->
-        string <>
-          if Keyword.get(list_of_waypoints, :optimize) do
-            "&waypoints=optimize:true|"
-          else
-            "&waypoints="
-          end
+        string =
+          string <>
+            if Keyword.get(list_of_waypoints, :optimize) do
+              "&waypoints=optimize:true|"
+            else
+              "&waypoints="
+            end
 
-        string <>
-          Enum.reduce(list_of_waypoints, fn waypoint, acc ->
-            acc <> "|" <> prepare_waypoint(waypoint)
-          end)
+        string =
+          string <>
+            Enum.reduce(list_of_waypoints, fn waypoint, acc ->
+              acc <> "|" <> prepare_waypoint(waypoint)
+            end)
 
         {string, options}
     end
