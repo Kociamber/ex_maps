@@ -5,7 +5,7 @@ defmodule ExMaps.MixProject do
   def project do
     [
       app: :ex_maps,
-      version: "0.1.0",
+      version: "1.0.0-rc.1",
       elixir: "~> 1.7",
       deps: deps(),
       start_permanent: Mix.env() == :prod,
@@ -19,6 +19,7 @@ defmodule ExMaps.MixProject do
         licenses: ["MIT"],
         links: %{"GitHub" => @github_url}
       ],
+      # include readme and changelog in the package documentation on HexDocs
       docs: [
         main: "readme",
         extras: ["README.md", "CHANGELOG.md"]
