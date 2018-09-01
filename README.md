@@ -23,7 +23,6 @@ defp deps() do
 end
 ```
 
--------
 ## Configuration
 
 In order to be able to use Google API, you need to get free or commercial [key](https://developers.google.com/maps/documentation/directions/get-api-key).
@@ -58,6 +57,8 @@ You can of course mix coordinates types, ie. cities names, latitude / longitude,
 ExMaps.get_directions([%{origin: "Warsaw", destination: "Amsterdam"}, %{origin: {52.3714894, 4.8957388}, destination: {52.3719729, 4.8903469}}], units: :metric)
 {:ok, %{WEATHER_DATA}}
 ```
+
+-------
 
 ## To do
 
