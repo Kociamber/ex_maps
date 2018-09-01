@@ -8,7 +8,7 @@
 ## Overivew
 
 Currently this wrapper handles directions calculations. Yes, it's written in Elixir so it's concurrent. It means that every coordinates entry on param list will spawn separate Elixir process (task) to retrieve the data from Google API or the cache if query has
-been already sent. It allows to create large amounts of queries in the same time and return them quickly. 
+been already sent. It allows to create large amounts of queries in the same time and return them quickly.
 
 The application is using super fast generational caching lib [Nebulex](https://github.com/cabol/nebulex)
 Since its latest version is rc3, this package is also treated as release candidate.
@@ -47,15 +47,15 @@ Please note that free Google API key has some limitations and it will be easy to
 First param is a list of coordinates, second one is a list of additional options explained on [hexdocs](https://hexdocs.pm/ex_maps/readme.html) and  [Google Dev Guide](https://developers.google.com/maps/documentation/directions/intro).
 
 ```elixir
-ExMaps.get_directions([%{origin: "Warsaw", destination: "Amsterdam"}, destination: {52.3719729, 4.8903469}}], units: :metric)
-{:ok, %{WEATHER_DATA}}
+ExMaps.get_directions([%{origin: "Warsaw", destination: "Amsterdam"}], units: :metric)
+[%{"geocoded_waypoints" => ... }]
 ```
 
 You can of course mix coordinates types, ie. cities names, latitude / longitude, etc.
 
 ```elixir
 ExMaps.get_directions([%{origin: "Warsaw", destination: "Amsterdam"}, %{origin: {52.3714894, 4.8957388}, destination: {52.3719729, 4.8903469}}], units: :metric)
-{:ok, %{WEATHER_DATA}}
+[%{"geocoded_waypoints" => ... }, %{"geocoded_waypoints" => ... }]
 ```
 
 -------
