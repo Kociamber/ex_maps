@@ -7,8 +7,8 @@
 
 ## Overivew
 
-The wrapper is concurrent, which means that every coordinates entry on param list will spawn separate Elixir process (task) to retrieve the data from Google API or the cache if query has
-been already sent.
+Currently this wrapper handles directions calculations. Yes, it's written in Elixir so it's concurrent. It means that every coordinates entry on param list will spawn separate Elixir process (task) to retrieve the data from Google API or the cache if query has
+been already sent. It allows to create large amounts of queries in the same time and return them quickly. 
 
 The application is using super fast generational caching lib [Nebulex](https://github.com/cabol/nebulex)
 Since its latest version is rc3, this package is also treated as release candidate.
@@ -62,6 +62,7 @@ ExMaps.get_directions([%{origin: "Warsaw", destination: "Amsterdam"}, %{origin: 
 
 ## To do
 
+*   Add [Distance Matrix](https://developers.google.com/maps/documentation/distance-matrix/start)
 *   Simplify configuration
 *   Expand test and docs coverage
 
