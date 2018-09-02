@@ -1,11 +1,11 @@
-defmodule ExMaps.Coordinator do
+defmodule ExMaps.DirectionsCoordinator do
   @moduledoc """
   GenServer implementation for worker tasks coordination.
   """
   use GenServer
   alias ExMaps.Worker
 
-  # Client API
+  # Client API.
   def start_link(options \\ []) do
     GenServer.start_link(__MODULE__, [], options ++ [name: __MODULE__])
   end
@@ -14,11 +14,13 @@ defmodule ExMaps.Coordinator do
     GenServer.call(__MODULE__, {:spawn_workers, coordinates, options})
   end
 
-  # Server Callbacks
+  # Server Callbacks.
+  @impl true
   def init(_jnitial_state) do
     {:ok, []}
   end
 
+  @impl true
   def handle_call({:spawn_workers, coordinates, options}, _from, _state) do
     worker_tasks =
       Enum.map(coordinates, fn coordinates ->

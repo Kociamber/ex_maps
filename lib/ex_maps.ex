@@ -2,7 +2,7 @@ defmodule ExMaps do
   @moduledoc """
   Public ExMaps application interface.
   """
-  alias ExMaps.Coordinator
+  alias ExMaps.{DirectionsCoordinator, DistanceMatrixCoordinator}
 
   @typedoc """
   General params.
@@ -13,6 +13,8 @@ defmodule ExMaps do
   @type output_format :: :json | :xml
   @type protocol :: :https | :http
   @type waypoint :: String.t() | {float, float} | %{place_id: String.t()}
+  @type origins :: String.t() | {float, float} | %{place_id: String.t()}
+  @type destinations :: String.t() | {float, float} | %{place_id: String.t()}
   @type ttl :: integer()
 
   @typedoc """
@@ -75,8 +77,9 @@ defmodule ExMaps do
 
   @doc """
   Returns calculated directions between provided locations.
-  It checkes wether the directions were alread calculated in cache first, if
-  not, it calls Google API, fetches the result, saves it in cache and returns it.
+  It checkes wether the directions with same set of options were alread calculated
+  and set in cache, if not, it calls Google API, fetches the result, saves it in
+  cache and returns it.
 
   ## Examples
 
@@ -86,6 +89,23 @@ defmodule ExMaps do
   """
   @spec get_directions(coordinates, options) :: [map]
   def get_directions(coordinates, options \\ []) when is_list(coordinates) do
-    Coordinator.spawn_workers(coordinates, options)
+    DirectionsCoordinator.spawn_workers(coordinates, options)
+  end
+
+  @doc """
+  Returns travel distance and time for a matrix of origins and destinations.
+  It checkes wether the matrix with same set of options was alread requested
+  and set in cache, if not, it calls Google API, fetches the result, saves it in
+  cache and returns it.
+
+  ## Examples
+
+      iex> ExMaps.get_distance_matrix([%{origin: "Warsaw", destination: "Amsterdam"}], units: :metric)
+      [%{...}]
+
+  """
+  @spec get_distance_matrix(destinations, origins, options) :: [map]
+  def get_distance_matrix(destinations, origins, options \\ []) do
+    DistanceMatrixCoordinator.spawn_workers(destinations, origins, options)
   end
 end

@@ -5,7 +5,7 @@ defmodule ExMaps.MixProject do
   def project do
     [
       app: :ex_maps,
-      version: "1.0.0-rc.1",
+      version: "1.1.0-rc.1",
       elixir: "~> 1.7",
       deps: deps(),
       start_permanent: Mix.env() == :prod,
