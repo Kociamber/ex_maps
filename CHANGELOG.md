@@ -16,3 +16,4 @@
       worker tasks for API calls / caching purposes. It allows to reduce queuing
       for multi interfaces calls.
     - Distance Matrix interface
+    - Code re-factor
