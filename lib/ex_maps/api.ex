@@ -10,9 +10,8 @@ defmodule ExMaps.Api do
   """
   @spec send_and_parse_request(map, key: atom) :: map
   def send_and_parse_request(coordinates, options) do
-    request_string = RequestString.build(coordinates, options)
-
-    request_string
+    coordinates
+    |> RequestString.build(options)
     |> call_api()
     |> parse_json()
   end
@@ -34,8 +33,7 @@ defmodule ExMaps.Api do
   end
 
   defp parse_json({:ok, json}) do
-    {:ok, map} = Jason.decode(json)
-    map
+    Jason.decode!(json)
   end
 
   defp parse_json({:error, reason, json_body}) do
