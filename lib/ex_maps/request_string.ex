@@ -191,8 +191,17 @@ defmodule ExMaps.RequestString do
   end
 
   ## Helper functions.
+
+  # Directions call.
   defp prepare_coordinates(%{origin: origin, destination: destination}) do
     "origin=" <> prepare_waypoint(origin) <> "&destination=" <> prepare_waypoint(destination)
+  end
+
+  # Distance matrix call.
+  defp prepare_coordinates(%{origins: origins, destinations: destinations}) do
+    "origins=" <>
+      Enum.map_join(origins, "|", &prepare_waypoint/1) <>
+      "&destinations=" <> Enum.map_join(destinations, "|", &prepare_waypoint/1)
   end
 
   defp prepare_waypoint(waypoint) when is_binary(waypoint), do: waypoint
