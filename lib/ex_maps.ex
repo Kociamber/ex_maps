@@ -18,7 +18,7 @@ defmodule ExMaps do
   @type ttl :: integer()
 
   @typedoc """
-  Required API request parameters.
+  Required Distance Calculations API request parameters.
 
   * `origin` — It can be passed in three different forms, as the address string,
   latitude/longitude tuple or map containing PlaceID.
@@ -28,7 +28,17 @@ defmodule ExMaps do
   @type coordinates :: [%{origin: waypoint, destination: waypoint}]
 
   @typedoc """
-  Optional API request parameters. Detailed description can be found below:
+  Required Distance Matrix API request parameters.
+
+  * `origin` — It can be passed in three different forms, as the address string,
+  latitude/longitude tuple or map containing PlaceID.
+  * `destination` — It can be passed in three different forms, as the address string,
+  latitude/longitude tuple or map containing PlaceID.
+  """
+  @type matrix_coordinates :: [%{origins: [waypoint], destinations: [waypoint]}]
+
+  @typedoc """
+  Shared APIs request optional parameters. Detailed description can be found below:
   https://developers.google.com/maps/documentation/directions/intro
 
   * `mode` -  Specifies the mode of transport to use when calculating directions.
@@ -104,8 +114,8 @@ defmodule ExMaps do
       [%{...}]
 
   """
-  @spec get_distance_matrix(destinations, origins, options) :: [map]
-  def get_distance_matrix(destinations, origins, options \\ []) do
-    DistanceMatrixCoordinator.spawn_workers(destinations, origins, options)
+  @spec get_distance_matrix(matrix_coordinates, options) :: [map]
+  def get_distance_matrix(matrix_coordinates, options \\ []) do
+    DistanceMatrixCoordinator.spawn_workers(matrix_coordinates, options)
   end
 end
