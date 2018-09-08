@@ -5,7 +5,7 @@
 
 **Fast, industrial strength, concurrent Google Maps interface for Elixir platforms.**
 
-## Overivew
+## Overview
 
 Currently this wrapper handles directions calculations. Google Directions API is a service that calculates directions between locations. You can search for directions for several modes of transportation, including transit, driving, walking, or cycling.
 Yes, it's written in Elixir so it's concurrent. It means that every coordinates entry on param list will spawn separate Elixir process (task) to retrieve the data from Google API or the cache if query has
