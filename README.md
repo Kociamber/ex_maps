@@ -7,9 +7,11 @@
 
 ## Overview
 
-Currently this wrapper handles directions calculations. Google Directions API is a service that calculates directions between locations. You can search for directions for several modes of transportation, including transit, driving, walking, or cycling.
-Yes, it's written in Elixir so it's concurrent. It means that every coordinates entry on param list will spawn separate Elixir process (task) to retrieve the data from Google API or the cache if query has
+Currently the wrapper handles [Directions](https://developers.google.com/maps/documentation/directions/start) and [Distance Matrix](https://developers.google.com/maps/documentation/distance-matrix/start) Google API calls.
+
+Yes, it's written in Elixir and it's concurrent. It means that every coordinates entry on param list will spawn separate Elixir process (task) to retrieve the data from Google API or the cache if query has
 been already sent. It allows to create large amounts of queries in the same time and return them quickly.
+In addition each interface type spawns his own "coordinator" process which prevents long queueing in case of multiple calls do different APIs in the same time.
 
 The application is using super fast generational caching lib [Nebulex](https://github.com/cabol/nebulex). Since its latest version is rc3, this package is also treated as release candidate.
 
@@ -19,7 +21,7 @@ Add ExMaps as a dependency to your `mix.exs` file:
 
 ```elixir
 defp deps() do
-  [{:ex_maps, "1.0.0-rc.1"}]
+  [{:ex_maps, "1.1.0-rc.1"}]
 end
 ```
 
@@ -58,13 +60,17 @@ ExMaps.get_directions([%{origin: "Warsaw", destination: "Amsterdam"}, %{origin: 
 [%{"geocoded_waypoints" => ... }, %{"geocoded_waypoints" => ... }]
 ```
 
+```elixir
+ExMaps.get_distance_matrix([%{origins: ["Warsaw", "Kraków"], destinations: ["Amsterdam", "Utrecht"]}], language: "pl")
+[%{"destination_addresses" => ...}]
+```
+
 -------
 
 ## To do
 
-*   Add [Distance Matrix](https://developers.google.com/maps/documentation/distance-matrix/start)
-*   Simplify configuration
-*   Expand test and docs coverage
+*   Add [Elevation](https://developers.google.com/maps/documentation/elevation/start) service.
+*   Simplify configuration.
 
 ## License
 

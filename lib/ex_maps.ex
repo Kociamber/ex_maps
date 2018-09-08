@@ -94,7 +94,7 @@ defmodule ExMaps do
   ## Examples
 
       iex> ExMaps.get_directions([%{origin: "Warsaw", destination: "Amsterdam"}], units: :metric)
-      [%{...}]
+      [%{"geocoded_waypoints" => ... }]
 
   """
   @spec get_directions(coordinates, options) :: [map]
@@ -110,8 +110,8 @@ defmodule ExMaps do
 
   ## Examples
 
-      iex> ExMaps.get_distance_matrix([%{origin: "Warsaw", destination: "Amsterdam"}], units: :metric)
-      [%{...}]
+      iex> ExMaps.get_distance_matrix([%{origins: ["Warsaw", "Kraków"], destinations: ["Amsterdam", "Utrecht"]}], language: "pl")
+      [%{"destination_addresses" => ...}]
 
   """
   @spec get_distance_matrix(matrix_coordinates, options) :: [map]
