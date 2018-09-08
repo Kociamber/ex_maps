@@ -10,7 +10,7 @@ defmodule ExMaps.RequestString do
   def build(coordinates, options) do
     {coordinates, options}
     |> protocol_substring()
-    |> prefix_substring()
+    |> request_type_substring()
     |> output_substring()
     |> origin_destination_substring()
     |> mode_substring()
@@ -35,9 +35,21 @@ defmodule ExMaps.RequestString do
     end
   end
 
-  # Directions call.
-  defp prefix_substring({string, coordinates, options}),
-    do: {string <> "maps.googleapis.com/maps/api/directions/", coordinates, options}
+  # Check api type basing on passed coordinates type.
+  defp request_type_substring({string, coordinates, options}) do
+    string =
+      string <>
+        "maps.googleapis.com/maps/api" <>
+        case coordinates do
+          %{origin: _origin_waypoint, destination: _destination_waypoint} ->
+            "/directions/"
+
+          %{origins: _origin_waypoint_list, destinations: _destination_waypoint_list} ->
+            "/distancematrix/"
+        end
+
+    {string, coordinates, options}
+  end
 
   # Output format, set JSON as default.
   defp output_substring({string, coordinates, options}) do
@@ -95,12 +107,7 @@ defmodule ExMaps.RequestString do
               "&waypoints="
             end
 
-        string =
-          string <>
-            Enum.reduce(list_of_waypoints, fn waypoint, acc ->
-              acc <> "|" <> prepare_waypoint(waypoint)
-            end)
-
+        string = string <> Enum.map_join(list_of_waypoints, "|", &prepare_waypoint/1)
         {string, options}
     end
   end
@@ -111,13 +118,7 @@ defmodule ExMaps.RequestString do
         {string, options}
 
       list_to_avoid ->
-        string =
-          string <>
-            "&avoid=" <>
-            Enum.reduce(list_to_avoid, fn avoid, acc ->
-              to_string(acc) <> "|" <> to_string(avoid)
-            end)
-
+        string = string <> "&avoid=" <> Enum.map_join(list_to_avoid, "|", &prepare_waypoint/1)
         {string, options}
     end
   end
@@ -190,14 +191,21 @@ defmodule ExMaps.RequestString do
   end
 
   ## Helper functions.
+
+  # Directions call.
   defp prepare_coordinates(%{origin: origin, destination: destination}) do
-    "origin="
-    |> Kernel.<>(prepare_waypoint(origin))
-    |> Kernel.<>("&destination=")
-    |> Kernel.<>(prepare_waypoint(destination))
+    "origin=" <> prepare_waypoint(origin) <> "&destination=" <> prepare_waypoint(destination)
+  end
+
+  # Distance matrix call.
+  defp prepare_coordinates(%{origins: origins, destinations: destinations}) do
+    "origins=" <>
+      Enum.map_join(origins, "|", &prepare_waypoint/1) <>
+      "&destinations=" <> Enum.map_join(destinations, "|", &prepare_waypoint/1)
   end
 
   defp prepare_waypoint(waypoint) when is_binary(waypoint), do: waypoint
+  defp prepare_waypoint(waypoint) when is_atom(waypoint), do: to_string(waypoint)
 
   defp prepare_waypoint({latitude, longitude}),
     do: Float.to_string(latitude) <> "," <> Float.to_string(longitude)

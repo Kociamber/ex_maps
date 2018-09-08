@@ -4,14 +4,14 @@ defmodule ExMaps.Application do
   """
   require Logger
   use Application
-  alias ExMaps.{Cache, Coordinator}
+  alias ExMaps.{Cache, MainCoordinator}
 
   def start(_type, _args) do
     import Supervisor.Spec
     Logger.info("Starting supervision tree for #{inspect(__MODULE__)}")
 
     children = [
-      worker(Coordinator, []),
+      supervisor(MainCoordinator, []),
       supervisor(Cache, [])
     ]
 

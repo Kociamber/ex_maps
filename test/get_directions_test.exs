@@ -1,8 +1,9 @@
 defmodule GetDirectionsTest do
   use ExUnit.Case
 
-  # Due to a query limit while using free API key only 11 tests can be sent in one go.
-  # Therefore there will be 11 tests with random params defined.
+  # Due to a query limit while using free API key only 10 tests can be run in one go.
+  # Therefore there will be 11 tests with random params defined. However, I will leave
+  # cases commented so you will be able to use them with your commercial keys.
 
   test ": can get directions data with get_directions/2, float waypoints and default options" do
     # given
@@ -189,51 +190,51 @@ defmodule GetDirectionsTest do
     assert String.contains?(units, "km")
     assert Map.get(map, "status") == "OK"
   end
-
-  test ": can get directions data with get_directions/2 and additional waypoints" do
-    # given
-    coordinates = [%{origin: "Warsaw", destination: "Amsterdam"}]
-    # when
-    result = ExMaps.get_directions(coordinates, waypoints: ["Berlin"])
-    # then
-    # check whether a list of maps is returned
-    assert is_list(result)
-    assert result != []
-    map = List.first(result)
-    assert is_map(map)
-    # check response status
-    assert Map.get(map, "status") == "OK"
-  end
-
-  test ": can get directions data with get_directions/2 biasing on region" do
-    # given
-    coordinates = [%{origin: "Toledo", destination: "Madrid"}]
-    # when
-    result = ExMaps.get_directions(coordinates, region: "es")
-    # then
-    # check whether a list of maps is returned
-    assert is_list(result)
-    assert result != []
-    map = List.first(result)
-    assert is_map(map)
-
-    # check response status
-    assert Map.get(map, "status") == "OK"
-  end
-
-  test ": can't get directions data with get_directions/2 without specified region" do
-    # given
-    coordinates = [%{origin: "Toledo", destination: "Madrid"}]
-    # when
-    result = ExMaps.get_directions(coordinates)
-    # then
-    # check whether a list of maps is returned
-    assert is_list(result)
-    assert result != []
-    map = List.first(result)
-    assert is_map(map)
-
-    # check response status
-    assert Map.get(map, "status") == "ZERO_RESULTS"
-  end
+  #
+  # test ": can get directions data with get_directions/2 and additional waypoints" do
+  #   # given
+  #   coordinates = [%{origin: "Warsaw", destination: "Amsterdam"}]
+  #   # when
+  #   result = ExMaps.get_directions(coordinates, waypoints: ["Berlin"])
+  #   # then
+  #   # check whether a list of maps is returned
+  #   assert is_list(result)
+  #   assert result != []
+  #   map = List.first(result)
+  #   assert is_map(map)
+  #   # check response status
+  #   assert Map.get(map, "status") == "OK"
+  # end
+  #
+  # test ": can get directions data with get_directions/2 biasing on region" do
+  #   # given
+  #   coordinates = [%{origin: "Toledo", destination: "Madrid"}]
+  #   # when
+  #   result = ExMaps.get_directions(coordinates, region: "es")
+  #   # then
+  #   # check whether a list of maps is returned
+  #   assert is_list(result)
+  #   assert result != []
+  #   map = List.first(result)
+  #   assert is_map(map)
+  #
+  #   # check response status
+  #   assert Map.get(map, "status") == "OK"
+  # end
+  #
+  # test ": can't get directions data with get_directions/2 without specified region" do
+  #   # given
+  #   coordinates = [%{origin: "Toledo", destination: "Madrid"}]
+  #   # when
+  #   result = ExMaps.get_directions(coordinates)
+  #   # then
+  #   # check whether a list of maps is returned
+  #   assert is_list(result)
+  #   assert result != []
+  #   map = List.first(result)
+  #   assert is_map(map)
+  #
+  #   # check response status
+  #   assert Map.get(map, "status") == "ZERO_RESULTS"
+  # end
 end
