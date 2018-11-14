@@ -68,7 +68,7 @@ defmodule ExMaps.RequestString do
 
   # Add API key.
   defp add_api_key_substring({string, _options}),
-    do: string <> "&APPID=#{Application.get_env(:ex_maps, :api_key)}"
+    do: string <> "&key=#{Application.get_env(:ex_maps, :api_key)}"
 
   ## Optional parameters section.
 

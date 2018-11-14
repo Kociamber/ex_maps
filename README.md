@@ -13,7 +13,7 @@ Yes, it's written in Elixir and it's concurrent. It means that every coordinates
 been already sent. It allows to create large amounts of queries in the same time and return them quickly.
 In addition each interface type spawns his own "coordinator" process which prevents long queueing in case of multiple calls do different APIs in the same time.
 
-The application is using super fast generational caching lib [Nebulex](https://github.com/cabol/nebulex). Since its latest version is rc3, this package is also treated as release candidate.
+The application is using super fast generational caching lib [Nebulex](https://github.com/cabol/nebulex).
 
 ## Installation
 
@@ -21,7 +21,7 @@ Add ExMaps as a dependency to your `mix.exs` file:
 
 ```elixir
 defp deps() do
-  [{:ex_maps, "1.1.0-rc.1"}]
+  [{:ex_maps, "1.1.0"}]
 end
 ```
 

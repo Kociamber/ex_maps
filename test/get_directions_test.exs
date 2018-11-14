@@ -190,6 +190,7 @@ defmodule GetDirectionsTest do
     assert String.contains?(units, "km")
     assert Map.get(map, "status") == "OK"
   end
+
   #
   # test ": can get directions data with get_directions/2 and additional waypoints" do
   #   # given
