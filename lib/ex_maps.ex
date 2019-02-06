@@ -83,7 +83,7 @@ defmodule ExMaps do
           | transit_mode
           | transit_routing_preference
 
-  @type options :: [option: term]
+  @type options :: [{option, term}]
 
   @doc """
   Returns calculated directions between provided locations.
