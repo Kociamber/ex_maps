@@ -21,7 +21,7 @@ Add ExMaps as a dependency to your `mix.exs` file:
 
 ```elixir
 defp deps() do
-  [{:ex_maps, "1.1.0"}]
+  [{:ex_maps, "1.1.1"}]
 end
 ```
 
