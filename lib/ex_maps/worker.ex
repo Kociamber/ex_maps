@@ -10,7 +10,7 @@ defmodule ExMaps.Worker do
   Checks wether request has been already cached, if not it sends it to
   Google API and caches it with specific TTL.
   """
-  @spec get_results(map, key: atom) :: map
+  @spec get_results(map, Keyword.t) :: map
   def get_results(coordinates, options) do
     with nil <- Cache.get({coordinates, options}),
          result <- Api.send_and_parse_request(coordinates, options),
