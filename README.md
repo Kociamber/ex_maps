@@ -1,6 +1,5 @@
 # ExMaps
 
-[![Module Version](https://img.shields.io/hexpm/v/ex_maps.svg)](https://hex.pm/packages/ex_maps)
 [![Hex Version](https://img.shields.io/hexpm/v/ex_maps.svg)](https://hex.pm/packages/ex_maps)
 [![Hex Docs](https://img.shields.io/badge/docs-hexpm-blue.svg)](https://hexdocs.pm/ex_maps/)
 [![License](https://img.shields.io/hexpm/l/ex_maps.svg)](https://github.com/kociamber/ex_maps/blob/master/LICENSE)
