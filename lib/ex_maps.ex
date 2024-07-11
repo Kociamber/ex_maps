@@ -1,59 +1,68 @@
 defmodule ExMaps do
   @moduledoc """
   Public ExMaps application interface.
+
+  This module provides functions to interact with the Google Maps API, offering
+  directions and distance matrix calculations.
   """
   alias ExMaps.{DirectionsCoordinator, DistanceMatrixCoordinator}
 
   @typedoc """
-  General params.
-
   Format of the output of Google Maps API call.
-  Please note that json is recommended by Google docs.
+  Please note that JSON is recommended by Google docs.
   """
   @type output_format :: :json | :xml
+
+  @typedoc """
+  Protocol type used for the request, defaults to HTTPS.
+  """
   @type protocol :: :https | :http
+
+  @typedoc """
+  Represents a waypoint, which can be a string, a tuple of latitude/longitude, or a map with a place ID.
+  """
   @type waypoint :: String.t() | {float, float} | %{place_id: String.t()}
+
+  @typedoc """
+  Represents origins for a distance matrix request.
+  """
   @type origins :: String.t() | {float, float} | %{place_id: String.t()}
+
+  @typedoc """
+  Represents destinations for a distance matrix request.
+  """
   @type destinations :: String.t() | {float, float} | %{place_id: String.t()}
+
+  @typedoc """
+  Time-to-live for cached results.
+  """
   @type ttl :: integer()
 
   @typedoc """
-  Required Distance Calculations API request parameters.
-
-  * `origin` — It can be passed in three different forms, as the address string,
-  latitude/longitude tuple or map containing PlaceID.
-  * `destination` — It can be passed in three different forms, as the address string,
-  latitude/longitude tuple or map containing PlaceID.
+  Required parameters for directions API request.
   """
   @type coordinates :: [%{origin: waypoint, destination: waypoint}]
 
   @typedoc """
-  Required Distance Matrix API request parameters.
-
-  * `origin` — It can be passed in three different forms, as the address string,
-  latitude/longitude tuple or map containing PlaceID.
-  * `destination` — It can be passed in three different forms, as the address string,
-  latitude/longitude tuple or map containing PlaceID.
+  Required parameters for distance matrix API request.
   """
   @type matrix_coordinates :: [%{origins: [waypoint], destinations: [waypoint]}]
 
   @typedoc """
-  Shared APIs request optional parameters. Detailed description can be found below:
-  https://developers.google.com/maps/documentation/directions/intro
+  Optional parameters shared across API requests.
 
-  * `mode` -  Specifies the mode of transport to use when calculating directions.
-  Defaults to driving.
-  * `waypoints` -  A list of waypoints.
-  * `alternatives` -  If set to true, API may provide more than one route alternative.
-  * `avoid` -  List of specific routes to avoid.
-  * `language` -  Directions may be provided in specified language (but not all JSON / XML answer fields)
-  * `units` -  If not present, unit system of the origin's country or region will be returned.
-  * `region` -  Biasing on a specific region.
-  * `arrival_time` -  Desired arrival time in seconds since midnight, January 1, 1970 UTC.
-  * `departure_time` -  Desired departure time in seconds since midnight, January 1, 1970 UTC.
-  * `traffic_model` -  It may only be specified for driving directions where the request includes a departure_time.
-  * `transit_mode` -  It may only be specified for transit directions.
-  * `transit_routing_preference` -  It may bias the options returned.
+  * `mode` - Specifies the mode of transport to use when calculating directions. Defaults to driving.
+  * `waypoints` - A list of waypoints.
+  * `alternatives` - If set to true, API may provide more than one route alternative.
+  * `avoid` - List of specific routes to avoid.
+  * `language` - Directions may be provided in specified language (not all JSON/XML answer fields).
+  * `units` - If not present, unit system of the origin's country or region will be returned.
+  * `region` - Biasing on a specific region.
+  * `arrival_time` - Desired arrival time in seconds since midnight, January 1, 1970 UTC.
+  * `departure_time` - Desired departure time in seconds since midnight, January 1, 1970 UTC.
+  * `traffic_model` - May only be specified for driving directions where the request includes a departure_time.
+  * `transit_mode` - May only be specified for transit directions.
+  * `transit_routing_preference` - May bias the options returned.
   """
   @type mode :: :driving | :walking | :bicycling | :transit
   @type waypoints :: :waypoints
@@ -63,8 +72,8 @@ defmodule ExMaps do
   @type language :: String.t()
   @type units :: :metric | :imperial
   @type region :: String.t()
-  @type arrival_time :: integer
-  @type departure_time :: integer
+  @type arrival_time :: integer()
+  @type departure_time :: integer()
   @type traffic_model :: :best_guess | :pessimistic | :optimistic
   @type transit_mode :: :bus | :subway | :train | :tram | :rail
   @type transit_routing_preference :: :less_walking | :fewer_transfers
@@ -87,9 +96,10 @@ defmodule ExMaps do
 
   @doc """
   Returns calculated directions between provided locations.
-  It checkes wether the directions with same set of options were alread calculated
-  and set in cache, if not, it calls Google API, fetches the result, saves it in
-  cache and returns it.
+
+  Checks whether the directions with the same set of options have already been calculated
+  and cached. If not, it calls the Google API, fetches the result, saves it in
+  cache, and returns it.
 
   ## Examples
 
@@ -97,16 +107,17 @@ defmodule ExMaps do
       [%{"geocoded_waypoints" => ... }]
 
   """
-  @spec get_directions(coordinates, options) :: [map]
+  @spec get_directions(coordinates(), options()) :: [map()]
   def get_directions(coordinates, options \\ []) when is_list(coordinates) do
     DirectionsCoordinator.spawn_workers(coordinates, options)
   end
 
   @doc """
   Returns travel distance and time for a matrix of origins and destinations.
-  It checkes wether the matrix with same set of options was alread requested
-  and set in cache, if not, it calls Google API, fetches the result, saves it in
-  cache and returns it.
+
+  Checks whether the matrix with the same set of options has already been requested
+  and cached. If not, it calls the Google API, fetches the result, saves it in
+  cache, and returns it.
 
   ## Examples
 
@@ -114,7 +125,7 @@ defmodule ExMaps do
       [%{"destination_addresses" => ...}]
 
   """
-  @spec get_distance_matrix(matrix_coordinates, options) :: [map]
+  @spec get_distance_matrix(matrix_coordinates(), options()) :: [map()]
   def get_distance_matrix(matrix_coordinates, options \\ []) do
     DistanceMatrixCoordinator.spawn_workers(matrix_coordinates, options)
   end

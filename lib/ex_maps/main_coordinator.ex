@@ -6,16 +6,16 @@ defmodule ExMaps.MainCoordinator do
   alias ExMaps.{DirectionsCoordinator, DistanceMatrixCoordinator}
 
   # Client API.
-  def start_link() do
-    Supervisor.start_link(__MODULE__, [], name: __MODULE__)
+  def start_link(options \\ []) do
+    Supervisor.start_link(__MODULE__, [], options ++ [name: __MODULE__])
   end
 
   # Server callbacks.
   @impl true
   def init(_arg) do
     children = [
-      {DirectionsCoordinator, []},
-      {DistanceMatrixCoordinator, []}
+      DirectionsCoordinator,
+      DistanceMatrixCoordinator
     ]
 
     Supervisor.init(children, strategy: :one_for_one)

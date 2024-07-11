@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 config :ex_maps, api_key: System.get_env("MAPS_API_KEY")
 

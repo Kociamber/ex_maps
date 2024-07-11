@@ -1,19 +1,23 @@
 # ExMaps
 
-[![Build Status](https://travis-ci.org/Kociamber/ex_maps.svg?branch=master)](https://travis-ci.org/Kociamber/ex_maps)
-[![Hex version badge](https://img.shields.io/hexpm/v/ex_maps.svg)](https://hex.pm/packages/ex_maps)
+[![Module Version](https://img.shields.io/hexpm/v/ex_maps.svg)](https://hex.pm/packages/ex_maps)
+[![Hex Version](https://img.shields.io/hexpm/v/ex_maps.svg)](https://hex.pm/packages/ex_maps)
+[![Hex Docs](https://img.shields.io/badge/docs-hexpm-blue.svg)](https://hexdocs.pm/ex_maps/)
+[![License](https://img.shields.io/hexpm/l/ex_maps.svg)](https://github.com/kociamber/ex_maps/blob/master/LICENSE)
+[![Total Download](https://img.shields.io/hexpm/dt/ex_maps.svg)](https://hex.pm/packages/ex_maps)
+[![Last Updated](https://img.shields.io/github/last-commit/kociamber/ex_maps.svg)](https://github.com/kociamber/ex_maps/commits/master)
 
-**Fast, industrial strength, concurrent Google Maps interface for Elixir platforms.**
+**Fast and simple Google Maps API client for Elixir applications.**
 
 ## Overview
 
 Currently the wrapper handles [Directions](https://developers.google.com/maps/documentation/directions/start) and [Distance Matrix](https://developers.google.com/maps/documentation/distance-matrix/start) Google API calls.
 
-Yes, it's written in Elixir and it's concurrent. It means that every coordinates entry on param list will spawn separate Elixir process (task) to retrieve the data from Google API or the cache if query has
-been already sent. It allows to create large amounts of queries in the same time and return them quickly.
-In addition each interface type spawns his own "coordinator" process which prevents long queueing in case of multiple calls do different APIs in the same time.
+This API client currently supports the [Directions](https://developers.google.com/maps/documentation/directions/start) and [Distance Matrix](https://developers.google.com/maps/documentation/distance-matrix/start) Google API calls.
 
-The application is using super fast generational caching lib [Nebulex](https://github.com/cabol/nebulex).
+Each coordinate entry in the parameter list spawns a separate Elixir process (task) to retrieve data from the Google API or the cache if the query has already been sent. This allows for the simultaneous execution of a large number of queries, returning results quickly. Additionally, each interface type spawns its own "coordinator" process to prevent long queue times when making multiple API calls simultaneously.
+
+The application uses the super-fast generational caching library [Nebulex](https://github.com/cabol/nebulex).
 
 ## Installation
 
@@ -21,16 +25,15 @@ Add ExMaps as a dependency to your `mix.exs` file:
 
 ```elixir
 defp deps() do
-  [{:ex_maps, "1.1.2"}]
+  [{:ex_maps, "1.1.3"}]
 end
 ```
 
 ## Configuration
 
-In order to be able to use Google API, you need to get free or commercial [key](https://developers.google.com/maps/documentation/directions/get-api-key).
-Please then create environmental variable MAPS_API_KEY with the value of your key.
+To use the Google API, you need a free or commercial [API key](https://developers.google.com/maps/documentation/directions/get-api-key). Set the environment variable `MAPS_API_KEY` to your key's value.
 
-If you are going to use this application as a dependency in your own project, you will need to copy and paste below configuration to your `config/config.exs` file:
+If you are using this application as a dependency in your project, add the following configuration to your `config/config.exs` file:
 
 ```elixir
 config :ex_maps, api_key: System.get_env("MAPS_API_KEY")
@@ -41,37 +44,39 @@ config :ex_maps, ExMaps.Cache,
   gc_interval: 3600
 ```
 
-..and you are ready to go!
+You are now ready to go!
 
 ## Basic Usage
 
-Please note that free Google API key has some limitations and it will be easy to exceed query limit per second.
-First param is a list of coordinates, second one is a list of additional options explained on [hexdocs](https://hexdocs.pm/ex_maps/readme.html) and  [Google Dev Guide](https://developers.google.com/maps/documentation/directions/intro).
+Note that a free Google API key has limitations and it's easy to exceed the query limit per second. The first parameter is a list of coordinates, and the second is a list of additional options explained on [hexdocs](https://hexdocs.pm/ex_maps/readme.html) and the [Google Dev Guide](https://developers.google.com/maps/documentation/directions/intro).
 
 ```elixir
 ExMaps.get_directions([%{origin: "Warsaw", destination: "Amsterdam"}], units: :metric)
 [%{"geocoded_waypoints" => ... }]
 ```
 
-You can of course mix coordinates types, ie. cities names, latitude / longitude, etc.
+You can mix coordinate types, such as city names and latitude/longitude pairs.
 
 ```elixir
-ExMaps.get_directions([%{origin: "Warsaw", destination: "Amsterdam"}, %{origin: {52.3714894, 4.8957388}, destination: {52.3719729, 4.8903469}}], units: :metric)
+ExMaps.get_directions([
+  %{origin: "Warsaw", destination: "Amsterdam"},
+  %{origin: {52.3714894, 4.8957388}, destination: {52.3719729, 4.8903469}}
+], units: :metric)
 [%{"geocoded_waypoints" => ... }, %{"geocoded_waypoints" => ... }]
 ```
 
 ```elixir
-ExMaps.get_distance_matrix([%{origins: ["Warsaw", "Kraków"], destinations: ["Amsterdam", "Utrecht"]}], language: "pl")
+ExMaps.get_distance_matrix([
+  %{origins: ["Warsaw", "Kraków"], destinations: ["Amsterdam", "Utrecht"]}
+], language: "pl")
 [%{"destination_addresses" => ...}]
 ```
 
--------
-
 ## To do
 
-*   Add [Elevation](https://developers.google.com/maps/documentation/elevation/start) service.
-*   Simplify configuration.
+* Add [Elevation](https://developers.google.com/maps/documentation/elevation/start) service.
+* Simplify configuration.
 
 ## License
 
-This project is MIT licensed. Please see the [`LICENSE.md`](https://github.com/Kociamber/ex_maps/blob/master/LICENSE.md) file for more details.
+This project is MIT licensed. See the [`LICENSE.md`](https://github.com/Kociamber/ex_maps/blob/master/LICENSE.md) file for more details.
