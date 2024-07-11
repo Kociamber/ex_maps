@@ -1,12 +1,26 @@
 defmodule ExMaps.RequestString do
   @moduledoc """
-  Request string cretion related functions.
+  Provides functions for creating request strings for the Google Maps API.
+
+  This module builds request strings based on the provided parameters, including coordinates and options.
   """
 
   @doc """
-  Builds request string basing on provided params.
+  Builds a request string based on the provided coordinates and options.
+
+  ## Parameters
+  - `coordinates`: A map containing the coordinates for the request.
+  - `options`: A keyword list of options to customize the request.
+
+  ## Examples
+
+      iex> ExMaps.RequestString.build(%{origin: "A", destination: "B"}, key: :value)
+      "https://maps.googleapis.com/maps/api/directions/json?origin=A&destination=B&key=YOUR_API_KEY"
+
+  ## Returns
+  - A string representing the complete request URL.
   """
-  @spec build(map, key: :atom) :: String.t()
+  @spec build(map(), keyword()) :: String.t()
   def build(coordinates, options) do
     {coordinates, options}
     |> protocol_substring()

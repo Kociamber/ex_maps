@@ -5,13 +5,9 @@ defmodule ExMaps.MixProject do
   def project do
     [
       app: :ex_maps,
-      version: "1.1.2",
-      elixir: "~> 1.8",
-      deps: deps(),
-      start_permanent: Mix.env() == :prod,
-      # Docs
       name: "ExMaps",
-      description: "Google Maps API Elixir client.",
+      version: "1.1.3",
+      description: "OpenWeatherMap API Elixir client.",
       source_url: @github_url,
       homepage_url: @github_url,
       package: [
@@ -19,30 +15,36 @@ defmodule ExMaps.MixProject do
         licenses: ["MIT"],
         links: %{"GitHub" => @github_url}
       ],
-      # include readme and changelog in the package documentation on HexDocs
+      dialyzer: [
+        plt_file: {:no_warn, "priv/plts/project.plt"},
+        format: :dialyxir,
+        paths: ["_build/dev/lib/ex_maps/ebin"]
+      ],
+      start_permanent: Mix.env() == :prod,
+      deps: deps(),
       docs: [
         main: "readme",
-        extras: ["README.md", "CHANGELOG.md"]
+        extras: ["README.md"]
       ]
     ]
   end
 
-  # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger],
+      extra_applications: [:logger, :wx, :observer, :runtime_tools],
       mod: {ExMaps.Application, []}
     ]
   end
 
-  # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:httpoison, "~> 1.4"},
-      {:jason, "~> 1.1"},
-      {:credo, "~> 0.10.0", only: [:dev, :test], runtime: false},
-      {:ex_doc, "~> 0.19", only: :dev, runtime: false},
-      {:nebulex, "~> 1.0"}
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:ex_doc, "~> 0.31", only: :dev, runtime: false},
+      {:httpoison, "~> 2.0"},
+      {:jason, "~> 1.4"},
+      {:nebulex, "~> 2.6"},
+      {:shards, "~> 1.1"}
     ]
   end
 end
